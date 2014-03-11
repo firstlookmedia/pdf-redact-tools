@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+# for this script to work, install the following packages:
+# sudo apt-get install imagemagick libimage-exiftool-perl
+
+import sys, os, subprocess
+
+def usage():
+    print "Assuming you've already run redact_explode, this will merge the PNGs back to a PDF"
+    print 'Usage:', sys.argv[0], '[filename.pdf]'
+
+if __name__ == '__main__':
+     # get input filename
+    if len(sys.argv) < 2:
+        usage()
+        sys.exit()
+        
+    original_filename = sys.argv[1]
+
+    # validate
+    basename = original_filename[:-4]
+    pages_dirname = '{0}_pages'.format(basename)
+    if not os.path.isdir(pages_dirname):
+        print pages_dirname, "isn't a directory"
+        sys.exit()
+
+    output_filename = original_filename.replace('.pdf', '-final.pdf')
+
+    # convert PNGs to PDF
+    print "Converting PNGs to PDF"
+    subprocess.call(['convert', '{0}/{1}-*.png'.format(pages_dirname, basename), output_filename])
+
+    # strip metadata
+    print "Stripping ImageMagick metadata"
+    subprocess.call(['exiftool', '-Title=', '-Producer=', output_filename])
+    os.remove('{0}_original'.format(output_filename))
+    
+    print "All done, your final output is is {0}".format(output_filename)
