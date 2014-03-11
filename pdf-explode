@@ -34,11 +34,28 @@ if __name__ == '__main__':
 
     # flatten all the PNGs, so they don't have transparent backgrounds
     print 'Flattening PNGs'
-    for filename in os.listdir(pages_dirname):
+    filenames = os.listdir(pages_dirname)
+    for filename in filenames:
         if filename[-4:] == '.png':
             new_filename = filename.replace('-transparent-', '-')
             subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
             os.remove('{0}/{1}'.format(pages_dirname, filename))
+
+    # rename files to sort alphabetically instead of just numerically
+    numbers = []
+    filenames = os.listdir(pages_dirname)
+    filenames.sort()
+    filename_template = pages_dirname+'/'+filenames[0].replace('-0.png', '-{0}.png')
+    for filename in filenames:
+        n = int(filename.split('.png')[0].split('-')[-1])
+        numbers.append(n)
+    numbers.sort()
+    digits = len(str(numbers[-1]))
+    for n in numbers:
+        cur_digits = len(str(n))
+        if cur_digits < digits:
+            new_n = '0'*(digits - cur_digits) + str(n)
+            os.rename(filename_template.format(n), filename_template.format(new_n))
 
     print 'All done, now go edit PNGs to redact and then run: pdf-merge', input_filename
 
