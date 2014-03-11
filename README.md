@@ -2,6 +2,17 @@
 
 PDF Redact Tools is a set of tools to help with securely redacting and stripping metadata from documents before publishing.
 
+## Quick Start
+
+On your Debian-ish Linux, install the dependencies and build and install the pdf-redact-tools package:
+
+    sudo apt-get install imagemagick libimage-exiftool-perl
+    ./build_and_install.sh
+
+For doing redacting, you'll probably also want GIMP.
+
+## How to Use
+
 To use it, convert your original document to a PDF.
 
 Then start by exploding the PDF into PNG files:
