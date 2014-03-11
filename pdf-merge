@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# for this script to work, install the following packages:
-# sudo apt-get install imagemagick libimage-exiftool-perl
-
 import sys, os, subprocess
 
 def usage():
