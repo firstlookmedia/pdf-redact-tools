@@ -40,5 +40,5 @@ if __name__ == '__main__':
             subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
             os.remove('{0}/{1}'.format(pages_dirname, filename))
 
-    print 'All done, now go edit PNGs to redact and then run: redact_merge', input_filename
+    print 'All done, now go edit PNGs to redact and then run: pdf-merge', input_filename
 
