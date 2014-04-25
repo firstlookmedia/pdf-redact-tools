@@ -4,12 +4,29 @@ PDF Redact Tools is a set of tools to help with securely redacting and stripping
 
 ## Quick Start
 
-On your Debian-ish Linux, install the dependencies and build and install the pdf-redact-tools package:
+### Debian-based Linux
+
+Here's how to package and install pdf-redact tools in Debian, Ubuntu, Mint, etc.:
 
     sudo apt-get install imagemagick libimage-exiftool-perl
-    ./build_and_install.sh
+    ./build_deb.sh
+    sudo dpkg -i deb_dist/pdf-redact-tools_0.1-1_all.deb
 
 For doing redacting, you'll probably also want GIMP.
+
+    sudo apt-get install gimp
+
+### Red Hat-based Linux
+
+Here's how to package and install pdf-redact tools in Red Hat, Fedora, CentOS, etc.:
+
+    sudo yum install ImageMagick perl-Image-ExifTool
+    ./build_rpm.sh
+    sudo yum install dist/pdf-redact-tools-0.1-1.noarch.rpm
+
+For doing redacting, you'll probably also want GIMP.
+
+    sudo yum install gimp
 
 ## How to Use
 
