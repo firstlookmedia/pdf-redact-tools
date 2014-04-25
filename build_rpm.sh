@@ -4,7 +4,7 @@
 rm -r deb_dist
 
 # build binary package
-python setup.py bdist_rpm --requires="ImageMagick perl-Image-ExifTool"
+python setup.py bdist_rpm --requires="ImageMagick, perl-Image-ExifTool"
 
 # install it
 echo ""
