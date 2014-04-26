@@ -52,3 +52,9 @@ When you're done, combine the PNGs back into a flattened, informationless PDF:
     pdf-merge original_document.pdf
 
 In this case, the final redacted PDF is called `orginal_document-final.pdf`.
+
+If you don't need to redact anything, but you just want a new PDF that definitely doesn't contain malware or metadata, you can simply sanitize it.
+
+    pdf-sanitize untrusted.pdf
+
+The final document that you can trust is called `untrusted-final.pdf`.
