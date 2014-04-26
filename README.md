@@ -28,6 +28,13 @@ For doing redacting, you'll probably also want GIMP.
 
     sudo yum install gimp
 
+### Mac OS X
+
+The easiest way to get this working on OS X is by installing dependencies with [Homebrew](http://brew.sh/). Once you've installed Homebrew, open a terminal and run:
+
+    brew install imagemagick exiftool
+    ./install_osx.sh
+
 ## How to Use
 
 To use it, convert your original document to a PDF.
