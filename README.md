@@ -32,7 +32,7 @@ For doing redacting, you'll probably also want GIMP.
 
 The easiest way to get this working on OS X is by installing dependencies with [Homebrew](http://brew.sh/). Once you've installed Homebrew, open a terminal and run:
 
-    brew install imagemagick exiftool
+    brew install imagemagick exiftool gs
     ./install_osx.sh
 
 ## How to Use
