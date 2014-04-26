@@ -37,9 +37,16 @@ if __name__ == '__main__':
     filenames = os.listdir(pages_dirname)
     for filename in filenames:
         if filename[-4:] == '.png':
-            new_filename = filename.replace('-transparent-', '-')
-            subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
-            os.remove('{0}/{1}'.format(pages_dirname, filename))
+            # one-page exploded PDFs end in "-transparent.png"
+            if filename[-16:] == '-transparent.png':
+                new_filename = filename.replace('-transparent', '-0')
+                subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
+                os.remove('{0}/{1}'.format(pages_dirname, filename))
+
+            else:
+                new_filename = filename.replace('-transparent-', '-')
+                subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
+                os.remove('{0}/{1}'.format(pages_dirname, filename))
 
     # rename files to sort alphabetically instead of just numerically
     numbers = []
