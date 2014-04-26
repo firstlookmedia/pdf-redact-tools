@@ -11,5 +11,5 @@ setup(name='pdf-redact-tools',
       description='A set of tools to help with securely redacting and stripping metadata from documents before publishing',
       long_description="PDF Redact Tools is a set of tools to help with securely redacting and stripping metadata from documents before publishing.",
       
-      scripts=['pdf-explode', 'pdf-merge']
+      scripts=['pdf-explode', 'pdf-merge', 'pdf-sanitize']
       )

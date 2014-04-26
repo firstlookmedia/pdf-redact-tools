@@ -1,0 +1,33 @@
+#!/usr/bin/env python
+
+import sys, os, subprocess, shutil
+
+def usage():
+    print 'This converts an untrusted PDF into one that you can trust'
+    print 'Usage:', sys.argv[0], '[filename.pdf]'
+
+if __name__ == '__main__':
+    # get input filename
+    if len(sys.argv) < 2:
+        usage()
+        sys.exit()
+        
+    input_filename = sys.argv[1]
+
+    # validate
+    if input_filename[-4:] != '.pdf':
+        print "Input filename isn't a PDF"
+        sys.exit()
+
+    if not os.path.isfile(input_filename):
+        print input_filename, "doesn't exist"
+        sys.exit()
+
+    subprocess.call(['pdf-explode', input_filename])
+    subprocess.call(['pdf-merge', input_filename])
+
+    # delete temp files
+    basename = input_filename[:-4]
+    pages_dirname = '{0}_pages'.format(basename)
+    shutil.rmtree(pages_dirname)
+
