@@ -8,7 +8,7 @@ PDF Redact Tools is a set of tools to help with securely redacting and stripping
 
 Here's how to package and install pdf-redact tools in Debian, Ubuntu, Mint, etc.:
 
-    sudo apt-get install imagemagick libimage-exiftool-perl
+    sudo apt-get install imagemagick libimage-exiftool-perl python-stdeb python-all
     ./build_deb.sh
     sudo dpkg -i deb_dist/pdf-redact-tools_0.1-1_all.deb
 
