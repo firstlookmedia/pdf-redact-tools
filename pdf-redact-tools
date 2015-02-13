@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+PDF Redact Tools | https://github.com/micahflee/pdf-redact-tools
+
+Copyright (C) 2014-2015 Micah Lee <micah@micahflee.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+import sys, os, subprocess, argparse
+
+def parse_arguments():
+    def require_pdf(fname):
+        ext = os.path.splitext(fname)[1][1:]
+        if ext.lower() != 'pdf':
+           parser.error("file must be a PDF")
+        if not os.path.isfile(fname):
+            parser.error("{} does not exist".format(fname))
+        return fname
+
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('-e', '--explode', 
+            metavar='filename', dest='explode_filename', 
+            type=lambda s:require_pdf(s), 
+            help='Explode a PDF into PNGs')
+    group.add_argument('-m', '--merge', 
+            metavar='filename', dest='merge_filename', 
+            type=lambda s:require_pdf(s), 
+            help='Merge a folder of PNGs into a PDF')
+    args = parser.parse_args()
+    return args
+
+def main():
+    # parse arguements
+    args = parse_arguments()
+    explode_filename = args.explode_filename
+    merge_filename = args.merge_filename
+    print explode_filename
+    
+
+if __name__ == '__main__':
+    main()
+
