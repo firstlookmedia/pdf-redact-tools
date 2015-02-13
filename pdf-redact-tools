@@ -18,7 +18,72 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-import sys, os, subprocess, argparse
+import sys, os, subprocess, argparse, shutil
+
+def explode(pdf_filename):
+    # make dir for pages
+    basename = os.path.splitext(pdf_filename)[0]
+    pages_dirname = '{0}_pages'.format(basename)
+    os.makedirs(pages_dirname, 0700)
+
+    # convert PDF to PNGs
+    print 'Converting PDF to PNGs'
+    subprocess.call(['convert', '-density', '128', pdf_filename, '-quality', '100', '-sharpen', '0x1.0', '{0}/{1}-transparent.png'.format(pages_dirname, basename)])
+
+    # flatten all the PNGs, so they don't have transparent backgrounds
+    print 'Flattening PNGs'
+    filenames = os.listdir(pages_dirname)
+    for filename in filenames:
+        if filename[-4:] == '.png':
+            # one-page exploded PDFs end in "-transparent.png"
+            if filename[-16:] == '-transparent.png':
+                new_filename = filename.replace('-transparent', '-0')
+                subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
+                os.remove('{0}/{1}'.format(pages_dirname, filename))
+
+            else:
+                new_filename = filename.replace('-transparent-', '-')
+                subprocess.call(['convert', '{0}/{1}'.format(pages_dirname, filename), '-flatten', '{0}/{1}'.format(pages_dirname, new_filename)])
+                os.remove('{0}/{1}'.format(pages_dirname, filename))
+
+    # rename files to sort alphabetically instead of just numerically
+    numbers = []
+    filenames = os.listdir(pages_dirname)
+    filenames.sort()
+    filename_template = pages_dirname+'/'+filenames[0].replace('-0.png', '-{0}.png')
+    for filename in filenames:
+        n = int(filename.split('.png')[0].split('-')[-1])
+        numbers.append(n)
+    numbers.sort()
+    digits = len(str(numbers[-1]))
+    for n in numbers:
+        cur_digits = len(str(n))
+        if cur_digits < digits:
+            new_n = '0'*(digits - cur_digits) + str(n)
+            os.rename(filename_template.format(n), filename_template.format(new_n))
+
+    return pages_dirname
+
+def merge(pdf_filename):
+    # make sure pages directory exists
+    basename = os.path.splitext(pdf_filename)[0]
+    pages_dirname = '{0}_pages'.format(basename)
+    if not os.path.isdir(pages_dirname):
+        print "{} is not a directory".format(pages_dirname)
+        return False
+
+    output_filename = pdf_filename.replace('.pdf', '-final.pdf')
+
+    # convert PNGs to PDF
+    print "Converting PNGs to PDF"
+    subprocess.call(['convert', '{0}/{1}-*.png'.format(pages_dirname, basename), output_filename])
+
+    # strip metadata
+    print "Stripping ImageMagick metadata"
+    subprocess.call(['exiftool', '-Title=', '-Producer=', output_filename])
+    os.remove('{0}_original'.format(output_filename))
+
+    return output_filename
 
 def parse_arguments():
     def require_pdf(fname):
@@ -31,14 +96,18 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-e', '--explode', 
-            metavar='filename', dest='explode_filename', 
-            type=lambda s:require_pdf(s), 
+    group.add_argument('-e', '--explode',
+            metavar='filename', dest='explode_filename',
+            type=lambda s:require_pdf(s),
             help='Explode a PDF into PNGs')
-    group.add_argument('-m', '--merge', 
-            metavar='filename', dest='merge_filename', 
-            type=lambda s:require_pdf(s), 
+    group.add_argument('-m', '--merge',
+            metavar='filename', dest='merge_filename',
+            type=lambda s:require_pdf(s),
             help='Merge a folder of PNGs into a PDF')
+    group.add_argument('-s', '--sanitize',
+            metavar='filename', dest='sanitize_filename',
+            type=lambda s:require_pdf(s),
+            help='Sanitize a PDF')
     args = parser.parse_args()
     return args
 
@@ -47,8 +116,28 @@ def main():
     args = parse_arguments()
     explode_filename = args.explode_filename
     merge_filename = args.merge_filename
-    print explode_filename
-    
+    sanitize_filename = args.merge_filename
+
+    # explode
+    if explode_filename:
+        pages_dirname = explode(explode_filename)
+        if pages_dirname:
+            print 'All done, now go edit PNGs in {} to redact and then run: pdf-merge {}'.format(pages_dirname, explode_filename)
+
+    # merge
+    if merge_filename:
+        output_filename = merge(merge_filename)
+        if output_filename:
+            print "All done, your final output is is {}".format(output_filename)
+
+    # sanitize
+    if sanitize_filename:
+        pages_dirname = explode(sanitize_filename)
+        output_filename = merge(sanitize_filename)
+
+        # delete temp files
+        shutil.rmtree(pages_dirname)
+
 
 if __name__ == '__main__':
     main()
