@@ -116,7 +116,7 @@ def main():
     args = parse_arguments()
     explode_filename = args.explode_filename
     merge_filename = args.merge_filename
-    sanitize_filename = args.merge_filename
+    sanitize_filename = args.sanitize_filename
 
     # explode
     if explode_filename:
