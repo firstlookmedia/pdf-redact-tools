@@ -9,9 +9,19 @@ PDF Redact Tools helps with securely redacting and stripping metadata from docum
 * Install [Homebrew](http://brew.sh/)
 * Open a terminal and type `brew install pdf-redact-tools`
 
-### GNU/Linux
+### Ubuntu
 
-PDF Redact Tools isn't yet packaged in GNU/Linux distributions, however it's easy to install by following the [build instructions](/BUILD.md).
+You can install PDF Redact Tools from this Ubuntu PPA:
+
+```sh
+sudo add-apt-repository ppa:micahflee/ppa
+sudo apt-get update
+sudo apt-get install pdf-redact-tools
+```
+
+### Other
+
+PDF Redact Tools isn't yet packaged in any GNU/Linux distributions yet, however it's easy to install by following the [build instructions](/BUILD.md). I haven't attempted to make this work in Windows.
 
 ## How to Use
 
