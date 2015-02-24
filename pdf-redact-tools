@@ -162,7 +162,7 @@ def main():
     if merge_filename:
         pdfrt.set_pdf_filename(merge_filename)
         if pdfrt.merge():
-            print "All done, your final output is is {}".format(pdfrt.output_filename)
+            print "All done, your final output is {}".format(pdfrt.output_filename)
 
     # sanitize
     if sanitize_filename:
@@ -172,7 +172,7 @@ def main():
                 # delete temp files
                 shutil.rmtree(pdfrt.pages_dirname)
 
-                print "All done, your final output is is {}".format(pdfrt.output_filename)
+                print "All done, your final output is {}".format(pdfrt.output_filename)
 
 if __name__ == '__main__':
     main()
