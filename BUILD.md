@@ -19,7 +19,7 @@ Create a .deb and install it:
 
 ```sh
 ./build_deb.sh
-sudo dpkg -i deb_dist/pdf-redact-tools_0.1-1_all.deb
+sudo dpkg -i deb_dist/pdf-redact-tools_*-1_all.deb
 ```
 
 ### Red Hat-based Linux (Red Hat, Fedora, CentOS, etc.)
@@ -34,7 +34,7 @@ Create a .rpm and install it:
 
 ```sh
 ./build_rpm.sh
-sudo yum install dist/pdf-redact-tools-0.1-1.noarch.rpm
+sudo yum install dist/pdf-redact-tools-*-1.noarch.rpm
 ```
 
 ### Mac OS X

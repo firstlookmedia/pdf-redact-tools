@@ -1,9 +1,12 @@
 from distutils.core import setup
 import os
 
+with open('version') as buf:
+    version = buf.read().strip()
+
 setup(
     name='pdf-redact-tools',
-    version='0.1',
+    version=version,
     author='Micah Lee',
     author_email='micah.lee@firstlook.org',
     platforms=['GNU/Linux'],
