@@ -156,7 +156,7 @@ def main():
     if explode_filename:
         pdfrt.set_pdf_filename(explode_filename)
         if pdfrt.explode():
-            print 'All done, now go edit PNGs in {} to redact and then run: pdf-merge {}'.format(pdfrt.pages_dirname, pdfrt.pdf_filename)
+            print 'All done, now go edit PNGs in {} to redact and then run: pdf-redact-tools -m {}'.format(pdfrt.pages_dirname, pdfrt.pdf_filename)
 
     # merge
     if merge_filename:

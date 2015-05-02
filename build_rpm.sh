@@ -3,7 +3,7 @@
 VERSION=`cat version`
 
 # clean up from last build
-rm -r deb_dist
+rm -r build
 
 # build binary package
 python setup.py bdist_rpm --requires="ImageMagick, perl-Image-ExifTool"
