@@ -1,5 +1,7 @@
 # PDF Redact Tools
 
+![PDF Redact Tools](/logo.png)
+
 PDF Redact Tools helps with securely redacting and stripping metadata from documents before publishing.
 
 ## Quick Start
