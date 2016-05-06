@@ -154,25 +154,43 @@ def main():
 
     # explode
     if explode_filename:
-        pdfrt.set_pdf_filename(explode_filename)
-        if pdfrt.explode():
-            print 'All done, now go edit PNGs in {} to redact and then run: pdf-redact-tools -m {}'.format(pdfrt.pages_dirname, pdfrt.pdf_filename)
+        if subprocess.check_output(['file', 
+            '-b',
+            '--mime-type',
+            explode_filename]).strip() != 'application/pdf':
+            print explode_filename,' does not appear to be a PDF file, will not process'
+        else:
+            pdfrt.set_pdf_filename(explode_filename)
+            if pdfrt.explode():
+                print 'All done, now go edit PNGs in {} to redact and then run: pdf-redact-tools -m {}'.format(pdfrt.pages_dirname, pdfrt.pdf_filename)
 
     # merge
     if merge_filename:
-        pdfrt.set_pdf_filename(merge_filename)
-        if pdfrt.merge():
-            print "All done, your final output is {}".format(pdfrt.output_filename)
+        if subprocess.check_output(['file', 
+            '-b',
+            '--mime-type',
+            merge_filename]).strip() != 'application/pdf':
+            print merge_filename,' does not appear to be a PDF file, will not process'
+        else:
+            pdfrt.set_pdf_filename(merge_filename)
+            if pdfrt.merge():
+                print "All done, your final output is {}".format(pdfrt.output_filename)
 
     # sanitize
     if sanitize_filename:
-        pdfrt.set_pdf_filename(sanitize_filename)
-        if pdfrt.explode():
-            if pdfrt.merge():
-                # delete temp files
-                shutil.rmtree(pdfrt.pages_dirname)
+        if subprocess.check_output(['file', 
+            '-b',
+            '--mime-type',
+            sanitize_filename]).strip() != 'application/pdf':
+            print sanitize_filename,' does not appear to be a PDF file, will not process'
+        else:
+            pdfrt.set_pdf_filename(sanitize_filename)
+            if pdfrt.explode():
+                if pdfrt.merge():
+                    # delete temp files
+                    shutil.rmtree(pdfrt.pages_dirname)
 
-                print "All done, your final output is {}".format(pdfrt.output_filename)
+                    print "All done, your final output is {}".format(pdfrt.output_filename)
 
 if __name__ == '__main__':
     main()
