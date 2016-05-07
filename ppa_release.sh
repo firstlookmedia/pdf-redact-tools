@@ -9,7 +9,7 @@ VERSION=`cat version`
 rm -rf deb_dist
 python setup.py --command-packages=stdeb.command sdist_dsc
 cd deb_dist/pdf-redact-tools-$VERSION
-dpkg-buildpackage -S
+dpkg-buildpackage -S -pqubes-gpg-client-wrapper-wrapper -k927F419D7EC82C2F149C1BD1403C2657CD994F73
 cd ..
 dput ppa:micahflee/ppa pdf-redact-tools_$VERSION-1_source.changes
 cd ..
