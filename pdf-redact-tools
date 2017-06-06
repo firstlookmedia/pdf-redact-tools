@@ -37,7 +37,7 @@ class PDFRedactTools(object):
 
         self.transparent_filename = os.path.join(self.pages_dirname, 'page-transparent.png')
 
-    def explode(self):
+    def explode(self, achromatic = False):
         if not self.pdf_filename:
             print 'Error: you must call set_pdf_filename before calling explode'
             return False
@@ -75,6 +75,24 @@ class PDFRedactTools(object):
                     '-flatten',
                     os.path.join(self.pages_dirname, new_filename)])
                 os.remove(os.path.join(self.pages_dirname, filename))
+
+        # convert images to achromatic to remove printer dots
+        if achromatic:
+            print 'Converting colors to achromatic'
+            filenames = os.listdir(self.pages_dirname)
+            for filename in filenames:
+                if os.path.splitext(filename)[1].lower() == '.png':
+                    # add '-bw' suffix to temporary file
+                    new_filename = filename.replace('.png', '-bw.png')
+
+                    subprocess.call(['convert',
+                        os.path.join(self.pages_dirname, filename),
+                        '-threshold', '75%',
+                        os.path.join(self.pages_dirname, new_filename)])
+                    # remove original files
+                    os.remove(os.path.join(self.pages_dirname, filename))
+                    # rename files with the '-bw.png' suffix to '.png'
+                    os.rename(os.path.join(self.pages_dirname, new_filename), os.path.join(self.pages_dirname, filename))
 
         # rename files to sort alphabetically instead of just numerically
         numbers = []
@@ -140,6 +158,9 @@ def parse_arguments():
             metavar='filename', dest='sanitize_filename',
             type=lambda s:require_pdf(s),
             help='Sanitize a PDF')
+    parser.add_argument('-a', '--achromatic',
+            action='store_true',
+            help='Convert to black and white to remove printer dots')
     args = parser.parse_args()
     return args
 
@@ -156,6 +177,7 @@ def main():
     explode_filename = args.explode_filename
     merge_filename = args.merge_filename
     sanitize_filename = args.sanitize_filename
+    achromatic = args.achromatic
 
     pdfrt = PDFRedactTools()
 
@@ -163,7 +185,7 @@ def main():
     if explode_filename:
         if valid_pdf(explode_filename):
             pdfrt.set_pdf_filename(explode_filename)
-            if pdfrt.explode():
+            if pdfrt.explode(achromatic):
                 print 'All done, now go edit PNGs in {} to redact and then run: pdf-redact-tools -m {}'.format(pdfrt.pages_dirname, pdfrt.pdf_filename)
         else:
             print explode_filename,' does not appear to be a PDF file, will not process'
@@ -181,7 +203,7 @@ def main():
     if sanitize_filename:
         if valid_pdf(sanitize_filename):
             pdfrt.set_pdf_filename(sanitize_filename)
-            if pdfrt.explode():
+            if pdfrt.explode(achromatic):
                 if pdfrt.merge():
                     # delete temp files
                     shutil.rmtree(pdfrt.pages_dirname)
