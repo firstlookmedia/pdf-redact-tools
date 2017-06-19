@@ -27,14 +27,14 @@ sudo dpkg -i deb_dist/pdf-redact-tools_*-1_all.deb
 Install dependencies:
 
 ```sh
-sudo yum install ImageMagick perl-Image-ExifTool
+sudo dnf install rpm-build ImageMagick perl-Image-ExifTool
 ```
 
 Create a .rpm and install it:
 
 ```sh
 ./build_rpm.sh
-sudo yum install dist/pdf-redact-tools-*-1.noarch.rpm
+sudo dnf install dist/pdf-redact-tools-*-1.noarch.rpm
 ```
 
 ### Mac OS X
