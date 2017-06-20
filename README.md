@@ -4,6 +4,8 @@
 
 PDF Redact Tools helps with securely redacting and stripping metadata from documents before publishing.
 
+*Warning:* PDF Redact Tools uses ImageMagick to parse PDFs. While ImageMagick is a versatile tool, it has a history of some [terrible](https://imagetragick.com/) security bugs. A malicious PDF could exploit a bug in ImageMagick to take over your computer. If you're working with potentially malicious PDFs, it's safest to run them through PDF Redact Tools in an isolated environment, such as a virtual machine, or by using a tool such as the [Qubes PDF Converter](https://github.com/QubesOS/qubes-app-linux-pdf-converter) instead.
+
 ## Quick Start
 
 ### Mac OS X
