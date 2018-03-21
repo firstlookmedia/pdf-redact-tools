@@ -165,6 +165,11 @@ def parse_arguments():
     return args
 
 def valid_pdf(filename):
+    # Reject filenames that start with '-', to avoid ImageMagick command injection
+    if filename.startswith('-'):
+        return False
+
+    # Make sure the file's mime type is 'application/pdf'
     return subprocess.check_output(['file',
         '-b',
         '--mime-type',
