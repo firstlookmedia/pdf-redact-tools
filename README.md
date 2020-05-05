@@ -1,5 +1,7 @@
 # PDF Redact Tools
 
+_Warning: This project is no longer maintained. A much better tool is [dangerzone](https://dangerzone.rocks)._
+
 ![PDF Redact Tools](/logo.png)
 
 PDF Redact Tools helps with securely redacting and stripping metadata from documents before publishing.
